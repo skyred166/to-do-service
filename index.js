@@ -1,23 +1,34 @@
 // Получение DOM-элементов
 const formElement = document.getElementById('to-do-form');
 const inputElement = document.getElementById('to-do-input');
+const descriptionElement = document.getElementById('to-do-description');
 const scheduleElement = document.getElementById('to-do-schedule');
 const listElement = document.getElementById('to-do-list');
 const templateElement = document.getElementById('to-do__item-template');
 const totalTasksElement = document.getElementById('total-tasks');
 const completedTasksElement = document.getElementById('completed-tasks');
 
+// Элементы модального окна
+const modalElement = document.getElementById('task-modal');
+const modalOverlay = document.getElementById('modal-overlay');
+const modalClose = document.getElementById('modal-close');
+const modalCloseButton = document.getElementById('modal-close-button');
+const modalTitle = document.getElementById('modal-title');
+const modalDescription = document.getElementById('modal-description');
+const modalSchedule = document.getElementById('modal-schedule');
+const modalStatus = document.getElementById('modal-status');
+
 // Переменная для отслеживания перетаскивания
 let draggedElement = null;
 
 // Исходный список задач
 const defaultItems = [
-  { text: 'Позвонить другу', schedule: '', completed: false },
-  { text: 'Купить продукты', schedule: '', completed: false },
-  { text: 'Написать письмо', schedule: '', completed: false },
-  { text: 'Сделать зарядку', schedule: '', completed: false },
-  { text: 'Помыть посуду', schedule: '', completed: false },
-  { text: 'Прочитать статью', schedule: '', completed: false }
+  { text: 'Позвонить другу', description: 'Позвонить старому другу и узнать как дела', schedule: '', completed: false },
+  { text: 'Купить продукты', description: 'Молоко, хлеб, яйца, помидоры', schedule: '', completed: false },
+  { text: 'Написать письмо', description: 'Отправить деловое письмо по проекту', schedule: '', completed: false },
+  { text: 'Сделать зарядку', description: '30 минут упражнений по утрам', schedule: '', completed: false },
+  { text: 'Помыть посуду', description: 'Вымыть всю грязную посуду на кухне', schedule: '', completed: false },
+  { text: 'Прочитать статью', description: 'Прочитать новую статью про веб-разработку', schedule: '', completed: false }
 ];
 
 // Функция для получения задач из локального хранилища или возврата исходного списка
@@ -40,10 +51,12 @@ function getTasksFromDOM() {
   const tasks = [];
   items.forEach((item) => {
     const textElement = item.querySelector('.to-do__item-text');
+    const descriptionElement = item.querySelector('.to-do__item-description');
     const scheduleElement = item.querySelector('.to-do__item-schedule');
     const checkboxElement = item.querySelector('.to-do__item-checkbox');
     tasks.push({
       text: textElement.textContent,
+      description: descriptionElement.dataset.description || '',
       schedule: scheduleElement.textContent,
       completed: checkboxElement.checked
     });
@@ -70,6 +83,33 @@ function formatSchedule(scheduleDateTime) {
   const minutes = date.getMinutes().toString().padStart(2, '0');
   return `📅 ${day}.${month} ${hours}:${minutes}`;
 }
+
+// Функция для открытия модального окна
+function openModal(taskData) {
+  modalTitle.textContent = taskData.text;
+  modalDescription.textContent = taskData.description || 'Описание отсутствует';
+  modalSchedule.textContent = taskData.schedule || 'Не установлено';
+  modalStatus.textContent = taskData.completed ? '✅ Выполнено' : '⏳ В процессе';
+  
+  modalElement.classList.remove('modal--hidden');
+}
+
+// Функция для закрытия модального окна
+function closeModal() {
+  modalElement.classList.add('modal--hidden');
+}
+
+// Обработчики закрытия модального окна
+modalClose.addEventListener('click', closeModal);
+modalCloseButton.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', closeModal);
+
+// Закрытие при нажатии Escape
+document.addEventListener('keydown', (evt) => {
+  if (evt.key === 'Escape' && !modalElement.classList.contains('modal--hidden')) {
+    closeModal();
+  }
+});
 
 // Функция для добавления обработчиков перетаскивания
 function addDragHandlers(itemElement) {
@@ -131,13 +171,17 @@ function createItem(taskData) {
   const itemElement = clone.querySelector('.to-do__item');
   const checkboxElement = clone.querySelector('.to-do__item-checkbox');
   const textElement = clone.querySelector('.to-do__item-text');
+  const descriptionDisplayElement = clone.querySelector('.to-do__item-description');
   const scheduleDisplayElement = clone.querySelector('.to-do__item-schedule');
+  const viewButton = clone.querySelector('.to-do__item-button_type_view');
   const deleteButton = clone.querySelector('.to-do__item-button_type_delete');
   const duplicateButton = clone.querySelector('.to-do__item-button_type_duplicate');
   const editButton = clone.querySelector('.to-do__item-button_type_edit');
 
   // Устанавливаем данные задачи
   textElement.textContent = taskData.text;
+  descriptionDisplayElement.textContent = taskData.description ? `📝 ${taskData.description.substring(0, 50)}...` : '';
+  descriptionDisplayElement.dataset.description = taskData.description;
   scheduleDisplayElement.textContent = formatSchedule(taskData.schedule);
   checkboxElement.checked = taskData.completed;
 
@@ -146,9 +190,15 @@ function createItem(taskData) {
     itemElement.classList.add('completed');
   }
 
+  // Обработчик для просмотра деталей
+  viewButton.addEventListener('click', () => {
+    openModal(taskData);
+  });
+
   // Обработчик для отметки выполнения
   checkboxElement.addEventListener('change', () => {
     itemElement.classList.toggle('completed');
+    taskData.completed = checkboxElement.checked;
     const tasks = getTasksFromDOM();
     saveTasks(tasks);
     updateStats();
@@ -166,6 +216,7 @@ function createItem(taskData) {
   duplicateButton.addEventListener('click', () => {
     const newTask = {
       text: taskData.text,
+      description: taskData.description,
       schedule: taskData.schedule,
       completed: false
     };
@@ -185,6 +236,7 @@ function createItem(taskData) {
   // Обработчик для сохранения изменений при потере фокуса
   textElement.addEventListener('blur', () => {
     textElement.setAttribute('contenteditable', 'false');
+    taskData.text = textElement.textContent;
     const tasks = getTasksFromDOM();
     saveTasks(tasks);
   });
@@ -206,6 +258,7 @@ formElement.addEventListener('submit', (evt) => {
 
   const newTask = {
     text: taskText,
+    description: descriptionElement.value.trim(),
     schedule: scheduleElement.value,
     completed: false
   };
@@ -218,6 +271,7 @@ formElement.addEventListener('submit', (evt) => {
   updateStats();
 
   inputElement.value = '';
+  descriptionElement.value = '';
   scheduleElement.value = '';
 });
 
