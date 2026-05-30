@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сервис To-Do</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page">
+    <div class="container">
+      <h1 class="title">Список дел</h1>
+      
+      <form class="to-do__form" id="to-do-form">
+        <div class="form-group">
+          <input 
+            type="text" 
+            class="to-do__input" 
+            id="to-do-input" 
+            placeholder="Введите новую задачу..."
+            required
+          >
+          <button type="submit" class="to-do__button to-do__button_type_add">Добавить</button>
+        </div>
+      </form>
+
+      <ul class="to-do__list" id="to-do-list"></ul>
+    </div>
+  </div>
+
+  <template id="to-do__item-template">
+    <li class="to-do__item">
+      <span class="to-do__item-text"></span>
+      <button class="to-do__item-button to-do__item-button_type_edit" aria-label="Редактировать"></button>
+      <button class="to-do__item-button to-do__item-button_type_duplicate" aria-label="Копировать"></button>
+      <button class="to-do__item-button to-do__item-button_type_delete" aria-label="Удалить"></button>
+    </li>
+  </template>
+
+  <script src="index.js"></script>
+</body>
+</html>
