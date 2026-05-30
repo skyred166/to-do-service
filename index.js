@@ -7,6 +7,9 @@ const templateElement = document.getElementById('to-do__item-template');
 const totalTasksElement = document.getElementById('total-tasks');
 const completedTasksElement = document.getElementById('completed-tasks');
 
+// Переменная для отслеживания перетаскивания
+let draggedElement = null;
+
 // Исходный список задач
 const defaultItems = [
   { text: 'Позвонить другу', schedule: '', completed: false },
@@ -66,6 +69,60 @@ function formatSchedule(scheduleDateTime) {
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
   return `📅 ${day}.${month} ${hours}:${minutes}`;
+}
+
+// Функция для добавления обработчиков перетаскивания
+function addDragHandlers(itemElement) {
+  itemElement.addEventListener('dragstart', (evt) => {
+    draggedElement = itemElement;
+    itemElement.classList.add('dragging');
+    evt.dataTransfer.effectAllowed = 'move';
+    evt.dataTransfer.setData('text/html', itemElement.innerHTML);
+  });
+
+  itemElement.addEventListener('dragend', () => {
+    itemElement.classList.remove('dragging');
+    document.querySelectorAll('.to-do__item').forEach((item) => {
+      item.classList.remove('drag-over');
+    });
+    draggedElement = null;
+  });
+
+  itemElement.addEventListener('dragover', (evt) => {
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'move';
+    
+    if (draggedElement && draggedElement !== itemElement) {
+      itemElement.classList.add('drag-over');
+    }
+  });
+
+  itemElement.addEventListener('dragleave', (evt) => {
+    if (evt.target === itemElement) {
+      itemElement.classList.remove('drag-over');
+    }
+  });
+
+  itemElement.addEventListener('drop', (evt) => {
+    evt.preventDefault();
+    
+    if (draggedElement && draggedElement !== itemElement) {
+      const allItems = Array.from(document.querySelectorAll('.to-do__item'));
+      const draggedIndex = allItems.indexOf(draggedElement);
+      const targetIndex = allItems.indexOf(itemElement);
+
+      if (draggedIndex < targetIndex) {
+        itemElement.parentNode.insertBefore(draggedElement, itemElement.nextSibling);
+      } else {
+        itemElement.parentNode.insertBefore(draggedElement, itemElement);
+      }
+
+      const tasks = getTasksFromDOM();
+      saveTasks(tasks);
+    }
+
+    itemElement.classList.remove('drag-over');
+  });
 }
 
 // Функция для создания элемента задачи
@@ -131,6 +188,9 @@ function createItem(taskData) {
     const tasks = getTasksFromDOM();
     saveTasks(tasks);
   });
+
+  // Добавляем обработчики перетаскивания
+  addDragHandlers(itemElement);
 
   return clone;
 }
