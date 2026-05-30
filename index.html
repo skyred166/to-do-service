@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  <!-- Модальное окно для детального просмотра задачи -->
+  <!-- Модальное окно для детального просмотра и редактирования задачи -->
   <div class="modal modal--hidden" id="task-modal">
     <div class="modal__overlay" id="modal-overlay"></div>
     <div class="modal__content">
@@ -61,11 +61,11 @@
         </div>
         <div class="modal__field">
           <label class="modal__label">Описание:</label>
-          <p class="modal__description" id="modal-description"></p>
+          <textarea class="modal__textarea" id="modal-description-input" placeholder="Добавить описание"></textarea>
         </div>
         <div class="modal__field">
           <label class="modal__label">Расписание:</label>
-          <p class="modal__text" id="modal-schedule"></p>
+          <input type="datetime-local" class="modal__input" id="modal-schedule-input">
         </div>
         <div class="modal__field">
           <label class="modal__label">Статус:</label>
@@ -73,6 +73,7 @@
         </div>
       </div>
       <div class="modal__footer">
+        <button class="modal__button modal__button_type_save" id="modal-save-button">Сохранить</button>
         <button class="modal__button modal__button_type_close" id="modal-close-button">Закрыть</button>
       </div>
     </div>
