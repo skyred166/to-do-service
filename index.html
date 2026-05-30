@@ -9,7 +9,7 @@
 <body>
   <div class="page">
     <div class="container">
-      <h1 class="title">Список дел</h1>
+      <h1 class="title">📋 Список дел</h1>
       
       <form class="to-do__form" id="to-do-form">
         <div class="form-group">
@@ -20,17 +20,31 @@
             placeholder="Введите новую задачу..."
             required
           >
+          <input 
+            type="datetime-local" 
+            class="to-do__input to-do__input_type_schedule" 
+            id="to-do-schedule"
+          >
           <button type="submit" class="to-do__button to-do__button_type_add">Добавить</button>
         </div>
       </form>
+
+      <div class="to-do__stats">
+        <span id="total-tasks">Всего: 0</span>
+        <span id="completed-tasks">Выполнено: 0</span>
+      </div>
 
       <ul class="to-do__list" id="to-do-list"></ul>
     </div>
   </div>
 
   <template id="to-do__item-template">
-    <li class="to-do__item">
-      <span class="to-do__item-text"></span>
+    <li class="to-do__item" data-task-id="">
+      <input type="checkbox" class="to-do__item-checkbox" aria-label="Отметить выполненной">
+      <div class="to-do__item-content">
+        <span class="to-do__item-text"></span>
+        <span class="to-do__item-schedule"></span>
+      </div>
       <button class="to-do__item-button to-do__item-button_type_edit" aria-label="Редактировать"></button>
       <button class="to-do__item-button to-do__item-button_type_duplicate" aria-label="Копировать"></button>
       <button class="to-do__item-button to-do__item-button_type_delete" aria-label="Удалить"></button>
