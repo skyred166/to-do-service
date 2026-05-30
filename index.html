@@ -34,12 +34,15 @@
         <span id="completed-tasks">Выполнено: 0</span>
       </div>
 
+      <p class="to-do__hint">💡 Перетаскивайте задачи для изменения порядка</p>
+
       <ul class="to-do__list" id="to-do-list"></ul>
     </div>
   </div>
 
   <template id="to-do__item-template">
-    <li class="to-do__item" data-task-id="">
+    <li class="to-do__item" data-task-id="" draggable="true">
+      <div class="to-do__drag-handle">≡</div>
       <input type="checkbox" class="to-do__item-checkbox" aria-label="Отметить выполненной">
       <div class="to-do__item-content">
         <span class="to-do__item-text"></span>
