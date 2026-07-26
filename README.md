@@ -1,85 +1,36 @@
-# Сервис To-Do
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Одностраничное приложение списка дел на JavaScript. Позволяет пользователям просматривать, добавлять, удалять, копировать и редактировать задачи с автоматическим сохранением в локальное хранилище.
+## Getting Started
 
-## 🎯 Функциональность
+First, run the development server:
 
-- ✅ **Просмотр задач** - отображение предустановленного списка при загрузке страницы
-- ✅ **Добавление задач** - добавление новых задач через форму в начало списка
-- ✅ **Удаление задач** - удаление задач со страницы и из хранилища
-- ✅ **Копирование задач** - создание дубликата задачи в начало списка
-- ✅ **Редактирование задач** - изменение текста задачи с сохранением изменений
-- ✅ **Локальное хранилище** - автоматическое сохранение всех изменений в localStorage
-
-## 🛠 Технологии
-
-- HTML5
-- CSS3 (с адаптивным дизайном)
-- Vanilla JavaScript (без фреймворков)
-- localStorage API
-
-## 📋 Структура проекта
-
-```
-to-do-service/
-├── index.html       # Разметка приложения
-├── styles.css       # Стили проекта
-├── index.js         # Логика приложения
-└── README.md        # Этот файл
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## 🚀 Использование
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-1. Откройте `index.html` в браузере или используйте локальный сервер
-2. Добавьте новую задачу через форму ввода
-3. Используйте кнопки для управления задачами:
-   - ✏️ **Редактировать** - нажмите, чтобы отредактировать текст задачи
-   - 📋 **Копировать** - создает копию задачи в начале списка
-   - 🗑️ **Удалить** - удаляет задачу из списка
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## 📝 Требования проекта
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-Проект реализует все требования чек-листа:
+## Learn More
 
-### Стиль написания кода
-- Единообразное форматирование
-- Использование `let` и `const` вместо `var`
-- Правильное именование в стиле camelCase
-- Осмысленные имена переменных и функций
+To learn more about Next.js, take a look at the following resources:
 
-### Функциональность
-- Загрузка задач при инициализации
-- Сохранение данных в localStorage
-- Полная CRUD-функциональность (Create, Read, Update, Delete)
-- Все операции выполняются без перезагрузки страницы
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-### Хорошие практики
-- Использование `forEach` для перебора элементов
-- Все DOM-элементы вынесены в переменные
-- Использование `querySelector` для поиска элементов
-- Каждая функция выполняет одну задачу
-- Использование `textContent` для работы с пользовательскими данными
-- Логично организованный код
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## 💾 Локальное хранилище
+## Deploy on Vercel
 
-Все задачи автоматически сохраняются в `localStorage` под ключом `tasks` в формате JSON. При перезагрузке страницы задачи восстанавливаются из хранилища.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-## 🎨 Дизайн
-
-Приложение имеет современный интерфейс с:
-- Красивым градиентным фоном
-- Адаптивным дизайном для мобильных устройств
-- Гладкими переходами и анимациями
-- Интуитивными иконками кнопок
-
-## 📱 Совместимость
-
-Работает на всех современных браузерах, поддерживающих:
-- ES6 JavaScript
-- localStorage API
-- CSS Grid и Flexbox
-
-## ⚖️ Лицензия
-
-Учебный проект
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
